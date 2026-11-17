@@ -1,0 +1,45 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	// Worker 名稱要和 Cloudflare 上已建立的 Worker 一致，否則會另外建一個新的
+	"name": "email",
+	"main": "src/index.ts",
+	"compatibility_date": "2026-03-10",
+	"compatibility_flags": [
+		"nodejs_compat"
+	],
+	"observability": {
+		"enabled": true
+	},
+	"preview_urls": false,
+	// 前端靜態頁（登入 / 收件匣 / 管理後台）
+	"assets": {
+		"directory": "./public"
+	},
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "mail-curl-db",
+			// ⚠️ 必填：執行 `npx wrangler d1 create mail-curl-db` 後把 database_id 貼到這裡
+			"database_id": "7acf366e-ce08-4b31-8659-725bb15d01dc"
+		}
+	],
+	"vars": {
+		// 收信網域：使用者拿到的地址會是 xxx@xzerox.xyz（多個網域用逗號分隔）
+		"domain": "xzerox.xyz",
+		// 郵箱前綴；留空 = 每次用隨機人名
+		"MAIL_PREFIX": "",
+		// 管理員登入帳號（不用是真實電郵，例如 admin；第一次登入時會自動建立）
+		"ADMIN_EMAIL": "admin",
+		// 只收「後台事先產生」的地址；改成 "true" 就恢復成任何地址都收
+		"ALLOW_UNKNOWN_ADDRESSES": "false",
+		// === Webhook（可選）===
+		"WEBHOOK_URL": "",
+		"WEBHOOK_SECRET": "",
+		"WEBHOOK_TIMEOUT_MS": "10000"
+	}
+	// 秘密不要寫在這裡（這是公開 repo），請用：
+	//   npx wrangler secret put ADMIN_PASSWORD
+	//   npx wrangler secret put WEBHOOK_SECRET
+	// 選用：給 curl 用的管理員 API Key
+	//   npx wrangler secret put JWT_KEY
+}

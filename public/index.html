@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex" />
+<title>登入・Mail Curl</title>
+<link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+
+<section class="login-screen">
+	<div class="login-card">
+		<div class="brand"><div class="brand-mark">✉</div><span class="brand-name">Mail Curl</span></div>
+
+		<h1>登入信箱</h1>
+		<p class="sub">請使用管理員建立給你的帳號登入。此站不開放自行註冊。</p>
+
+		<div id="loginError" class="error-box hidden"></div>
+
+		<form id="loginForm" autocomplete="off">
+			<div class="field">
+				<label for="email">帳號</label>
+				<input id="email" name="email" type="text" autocapitalize="none" autocorrect="off" spellcheck="false" autocomplete="username" placeholder="例如 admin" required />
+			</div>
+
+			<div class="field">
+				<label for="password">密碼</label>
+				<input id="password" name="password" type="password" autocomplete="current-password" placeholder="••••••••" required />
+			</div>
+
+			<button id="loginBtn" class="btn btn-primary btn-block" type="submit">確認</button>
+		</form>
+
+		<div class="login-foot">
+			帳號與收信地址都由管理員在後台建立。<br />
+			忘記密碼或還沒有帳號，請聯絡管理員。
+		</div>
+	</div>
+</section>
+
+<script src="/common.js"></script>
+<script>
+(() => {
+	"use strict";
+
+	const { $, api, toast } = window.MC;
+
+	// 已經登入就直接進到對應頁面
+	(async () => {
+		try {
+			const me = await api("/api/me");
+			if (me && me.user) {
+				location.replace(me.user.role === "admin" ? "/admin.html" : "/inbox.html");
+			}
+		} catch (_) {
+			/* 停在登入頁 */
+		}
+	})();
+
+	function showError(message) {
+		const box = $("loginError");
+		if (!message) {
+			box.classList.add("hidden");
+			return;
+		}
+		box.textContent = message;
+		box.classList.remove("hidden");
+	}
+
+	$("loginForm").addEventListener("submit", async (event) => {
+		event.preventDefault();
+		showError("");
+
+		const email = $("email").value.trim();
+		const password = $("password").value;
+
+		if (!email || !password) {
+			showError("請輸入帳號和密碼。");
+			return;
+		}
+
+		const button = $("loginBtn");
+		button.disabled = true;
+		button.innerHTML = '<span class="spinner"></span><span>登入中…</span>';
+
+		try {
+			const result = await api("/api/login", { method: "POST", body: { email, password } });
+			location.replace(result.redirect || (result.user.role === "admin" ? "/admin.html" : "/inbox.html"));
+		} catch (error) {
+			showError(error.status === 401 ? "帳號或密碼不正確。" : error.message);
+			button.disabled = false;
+			button.textContent = "確認";
+			$("password").select();
+		}
+	});
+
+	$("email").addEventListener("input", () => showError(""));
+	$("password").addEventListener("input", () => showError(""));
+})();
+</script>
+</body>
+</html>

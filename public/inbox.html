@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex" />
+<title>收件匣・Mail Curl</title>
+<link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+
+<div class="mail-app">
+	<header class="topbar">
+		<div class="brand"><div class="brand-mark">✉</div><span class="brand-name">Mail Curl</span></div>
+
+		<div class="search">
+			<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+				<circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path>
+			</svg>
+			<input id="searchInput" type="search" placeholder="搜尋寄件人、主旨或驗證碼" />
+		</div>
+
+		<div class="topbar-right">
+			<button id="accountChip" class="account-chip" title="點一下複製地址">
+				<div class="avatar" id="accountAvatar">M</div>
+				<span id="accountEmail">—</span>
+			</button>
+			<button id="refreshBtn" class="icon-btn" title="重新整理">
+				<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+					<path d="M20 11a8 8 0 1 0-2.3 5.7"></path><path d="M20 4v7h-7"></path>
+				</svg>
+			</button>
+			<button id="logoutBtn" class="icon-btn" title="登出">
+				<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+					<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+					<path d="m16 17 5-5-5-5"></path><path d="M21 12H9"></path>
+				</svg>
+			</button>
+		</div>
+	</header>
+
+	<div class="layout">
+		<aside class="sidebar">
+			<div class="side-title">我的信箱</div>
+			<div id="mailboxNav"></div>
+
+			<button id="copyAddressBtn" class="nav-item">
+				<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+					<rect x="9" y="9" width="11" height="11" rx="2"></rect>
+					<path d="M5 15V5a2 2 0 0 1 2-2h10"></path>
+				</svg>
+				<span class="label">複製目前地址</span>
+			</button>
+
+			<a id="adminLink" class="nav-item hidden" href="/admin.html">
+				<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+					<circle cx="12" cy="12" r="3"></circle>
+					<path d="M19 12a7 7 0 0 0-.1-1l2-1.5-2-3.4-2.3 1a7 7 0 0 0-1.7-1L14.5 3h-4l-.4 2.6a7 7 0 0 0-1.7 1l-2.3-1-2 3.4L6 11a7 7 0 0 0 0 2l-2 1.5 2 3.4 2.3-1a7 7 0 0 0 1.7 1l.4 2.6h4l.4-2.6a7 7 0 0 0 1.7-1l2.3 1 2-3.4-2-1.5c.1-.3.1-.7.1-1z"></path>
+				</svg>
+				<span class="label">管理後台</span>
+			</a>
+
+			<div class="side-card">
+				目前登入<br /><b id="userEmail">—</b>
+			</div>
+			<div class="side-card">
+				驗證碼會自動抓 4～8 位數字，點一下就能複製。信箱由管理員建立與分配。
+			</div>
+		</aside>
+
+		<main class="list-pane">
+			<div class="list-head">
+				收件匣
+				<span id="listStatus" class="status">—</span>
+			</div>
+			<div id="mailList" class="mail-list"></div>
+		</main>
+
+		<section id="readerPane" class="reader-pane">
+			<div class="reader-toolbar">
+				<button id="backBtn" class="icon-btn back-btn" title="返回">
+					<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+						<path d="M15 18l-6-6 6-6"></path>
+					</svg>
+				</button>
+				<div id="viewToggle" class="view-toggle hidden">
+					<button data-view="text" class="on">純文字</button>
+					<button data-view="html">HTML</button>
+				</div>
+				<button id="copyMailCodeBtn" class="btn btn-ghost hidden" style="margin-left:auto">複製驗證碼</button>
+			</div>
+			<div id="readerBody" class="reader-body">
+				<div class="empty">
+					<div class="big">📬</div>
+					選一封信來閱讀
+				</div>
+			</div>
+		</section>
+	</div>
+</div>
+
+<script src="/common.js"></script>
+<script src="/inbox.js"></script>
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex" />
+<title>管理後台・Mail Curl</title>
+<link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+
+<header class="admin-head">
+	<div class="brand"><div class="brand-mark">✉</div><span class="brand-name">Mail Curl</span></div>
+	<span class="badge admin">管理員</span>
+	<div class="spacer"></div>
+	<span class="hint" id="adminEmail" style="margin:0">—</span>
+	<a class="btn btn-ghost btn-sm" href="/inbox.html">收件匣</a>
+	<button id="logoutBtn" class="btn btn-ghost btn-sm">登出</button>
+</header>
+
+<div class="admin-wrap">
+	<p class="admin-sub">建立使用者帳號、產生收信地址，並把地址分配給使用者。前台不開放註冊。</p>
+
+	<div class="admin-grid">
+		<section class="panel">
+			<h2>建立使用者</h2>
+			<p class="panel-desc">使用者用這組「帳號＋密碼」登入前台。帳號由你建立，前台沒有註冊功能。</p>
+			<form id="newUserForm" autocomplete="off">
+				<div class="field">
+					<label for="newUserEmail">登入帳號（英數字，可含 . _ -，或完整電郵）</label>
+					<input id="newUserEmail" type="text" autocapitalize="none" spellcheck="false" placeholder="例如 alice" required />
+				</div>
+				<div class="field">
+					<label for="newUserPassword">初始密碼（至少 6 位）</label>
+					<input id="newUserPassword" type="text" placeholder="至少 6 位" required />
+				</div>
+				<button id="createUserBtn" class="btn btn-primary btn-block" type="submit">建立帳號</button>
+			</form>
+		</section>
+
+		<section class="panel">
+			<h2>產生收信地址</h2>
+			<p class="panel-desc">地址產生後可以立刻分配給使用者；使用者登入後才看得到裡面的信。</p>
+			<form id="newMailboxForm" autocomplete="off">
+				<div class="field">
+					<label for="newMailboxPrefix">地址前綴（可留空，自動用隨機名字）</label>
+					<input id="newMailboxPrefix" type="text" placeholder="例如 alex" />
+				</div>
+				<div class="row" style="margin-bottom:16px">
+					<div class="field">
+						<label for="newMailboxDomain">域名</label>
+						<select id="newMailboxDomain"></select>
+					</div>
+					<div class="field">
+						<label for="newMailboxOwner">分配給</label>
+						<select id="newMailboxOwner"></select>
+					</div>
+				</div>
+				<button id="createMailboxBtn" class="btn btn-primary btn-block" type="submit">產生地址</button>
+			</form>
+		</section>
+	</div>
+
+	<section class="table-panel">
+		<div class="table-head">
+			<h2>收信地址</h2>
+			<span class="count" id="mailboxesCount">0 個</span>
+			<div class="spacer"></div>
+			<input id="mailboxSearch" class="input" style="max-width:240px;padding:8px 12px" type="search" placeholder="搜尋地址或擁有者" />
+			<button id="refreshBtn" class="btn btn-ghost btn-sm">重新整理</button>
+		</div>
+		<div class="table-scroll">
+			<table class="data">
+				<thead>
+					<tr>
+						<th>地址</th>
+						<th>擁有者</th>
+						<th>郵件</th>
+						<th>建立時間</th>
+						<th style="text-align:right">操作</th>
+					</tr>
+				</thead>
+				<tbody id="mailboxesBody"></tbody>
+			</table>
+		</div>
+	</section>
+
+	<section class="table-panel">
+		<div class="table-head">
+			<h2>使用者</h2>
+			<span class="count" id="usersCount">0 個</span>
+			<div class="spacer"></div>
+		</div>
+		<div class="table-scroll">
+			<table class="data">
+				<thead>
+					<tr>
+						<th>登入帳號</th>
+						<th>角色</th>
+						<th>地址數</th>
+						<th>建立時間</th>
+						<th style="text-align:right">操作</th>
+					</tr>
+				</thead>
+				<tbody id="usersBody"></tbody>
+			</table>
+		</div>
+	</section>
+</div>
+
+<script src="/common.js"></script>
+<script src="/admin.js"></script>
+</body>
+</html>
